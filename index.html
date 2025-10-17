@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sorry Sister 💖</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Comic Sans MS', cursive, sans-serif;
+        background: #ffe6f0;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+    }
+    h1 {
+        font-size: 36px;
+        color: #d63384;
+        margin-bottom: 20px;
+        animation: bounce 2s infinite;
+        text-align: center;
+    }
+    p {
+        font-size: 20px;
+        color: #555;
+        margin-bottom: 40px;
+        text-align: center;
+    }
+    button {
+        padding: 15px 30px;
+        margin: 10px;
+        font-size: 18px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.5s;
+        position: relative;
+    }
+    #forgive {
+        background-color: #ff69b4;
+        color: white;
+    }
+    #dont {
+        background-color: #ffa6c9;
+        color: white;
+    }
+    .heart {
+        position: absolute;
+        font-size: 20px;
+        animation: floatUp 5s linear infinite;
+        pointer-events: none;
+    }
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+    @keyframes floatUp {
+        0% { transform: translateY(0) scale(1); opacity: 1; }
+        100% { transform: translateY(-800px) scale(1.5); opacity: 0; }
+    }
+    .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        top: 0;
+        left: 50%;
+        opacity: 0.9;
+        border-radius: 50%;
+        animation: confettiFall 3s linear forwards;
+    }
+    @keyframes confettiFall {
+        0% { transform: translateY(0) rotate(0deg); }
+        100% { transform: translateY(800px) rotate(360deg); opacity: 0; }
+    }
+    #volumeControl {
+        position: fixed;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+</style>
+</head>
+<body>
+
+<h1>Sorry, Sister 😔</h1>
+<p>I didn’t mean to hurt you. Please forgive me!</p>
+
+<button id="forgive">I Forgive You 💖</button>
+<button id="dont">I Don't ❌</button>
+
+<!-- Floating hearts container -->
+<div id="hearts"></div>
+
+<!-- Background music -->
+<audio id="bgMusic" src="Blue.mp3" autoplay loop></audio>
+<input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.3">
+
+<script>
+    const dontBtn = document.getElementById('dont');
+    const forgiveBtn = document.getElementById('forgive');
+    const heartsContainer = document.getElementById('hearts');
+    const bgMusic = document.getElementById('bgMusic');
+    const volumeControl = document.getElementById('volumeControl');
+    let dontClicks = 0;
+
+    bgMusic.volume = 0.3;
+    volumeControl.addEventListener('input', () => {
+        bgMusic.volume = volumeControl.value;
+    });
+
+    // Heart generator
+    function createHeart() {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+        heart.style.fontSize = (20 + Math.random() * 20) + 'px';
+        const colors = ['💖','💗','💘','💞','💕'];
+        heart.innerText = colors[Math.floor(Math.random() * colors.length)];
+        heartsContainer.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+    }
+    setInterval(createHeart, 200);
+
+    // Confetti generator
+    function createConfetti() {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        confetti.style.left = Math.random() * window.innerWidth + 'px';
+        const colors = ['#ff69b4','#ffb6c1','#ff1493','#ff82ab','#ff33aa'];
+        confetti.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 3000);
+    }
+
+    forgiveBtn.addEventListener('click', () => {
+        alert("Yay! Thank you for forgiving me 💖");
+        // Confetti celebration
+        for(let i=0;i<50;i++) { createConfetti(); }
+    });
+
+    dontBtn.addEventListener('click', () => {
+        dontClicks++;
+        if(dontClicks >= 4){
+            const maxX = window.innerWidth - dontBtn.offsetWidth - 20;
+            const maxY = window.innerHeight - dontBtn.offsetHeight - 20;
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            dontBtn.style.transition = "all 0.5s ease";
+            dontBtn.style.position = 'absolute';
+            dontBtn.style.left = `${randomX}px`;
+            dontBtn.style.top = `${randomY}px`;
+            dontBtn.innerText = "You can't click me!";
+        } else {
+            alert("Hmm... are you sure?");
+        }
+    });
+</script>
+
+</body>
+</html>
